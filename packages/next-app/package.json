@@ -1,0 +1,41 @@
+{
+    "name": "next-app",
+    "version": "0.1.0",
+    "private": true,
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "prettier": "npx prettier --write . '!(node_module|build)/**/*'"
+    },
+    "dependencies": {
+        "@types/node": "18.15.3",
+        "@types/react": "18.0.28",
+        "@types/react-dom": "18.0.11",
+        "@web3uikit/core": "^0.2.48",
+        "@web3uikit/icons": "^0.3.0",
+        "@web3uikit/web3": "^0.2.2",
+        "eslint": "8.36.0",
+        "eslint-config-next": "13.2.4",
+        "next": "13.2.4",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "5.0.2"
+    },
+    "devDependencies": {
+        "eslint-config-prettier": "^8.7.0"
+    }
+}

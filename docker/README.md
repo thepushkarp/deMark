@@ -1,6 +1,6 @@
 # 🏄‍♂️ Using Docker
 
-Prerequisites: 
+Prerequisites:
 - [Docker](https://docs.docker.com/engine/install/)
 - [Git](https://git-scm.com/)
 - Bash Shell: available in macOS by default and the vast majority of Linux distros
@@ -63,7 +63,7 @@ docker run \
 
 🔏 Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
 
-📝 Edit your frontend `App.jsx` in `packages/react-app/src`
+📝 Edit your frontend in `packages/next-app/src`
 
 💼 Edit your deployment scripts in `packages/hardhat/deploy`
 
