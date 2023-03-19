@@ -25,15 +25,12 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors,
   provider,
 });
 
 export default function Home() {
-  // if wallet is not connected, show <Landing> component
-  // if wallet is connected, show <App> component
-
   const { address, isConnecting, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {
       console.log("Connected", { address, connector, isReconnected });

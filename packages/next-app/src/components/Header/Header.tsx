@@ -12,6 +12,7 @@ export default function Header() {
           className={inter.className}
           style={{
             fontWeight: 700,
+            fontSize: "1.5rem",
             userSelect: "none",
           }}
         >
