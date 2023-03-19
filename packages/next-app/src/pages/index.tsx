@@ -1,15 +1,17 @@
 import Head from "next/head";
-import App from "./App/app";
+import App from "./App/App";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
+import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { configureChains, createClient, WagmiConfig, useAccount } from "wagmi";
+import { mainnet, polygon, optimism, arbitrum, goerli, localhost } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import Landing from "./Landing/Landing";
 
 const { chains, provider } = configureChains(
-  [mainnet, polygon, optimism, arbitrum],
+  [mainnet, polygon, optimism, arbitrum, goerli, localhost],
   [
     infuraProvider({ apiKey: process.env.INFURA_ID }),
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
@@ -23,12 +25,24 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  autoConnect: true,
+  autoConnect: false,
   connectors,
   provider,
 });
 
 export default function Home() {
+  // if wallet is not connected, show <Landing> component
+  // if wallet is connected, show <App> component
+
+  const { address, isConnecting, isDisconnected } = useAccount({
+    onConnect({ address, connector, isReconnected }) {
+      console.log("Connected", { address, connector, isReconnected });
+    },
+    onDisconnect() {
+      console.log("Disconnected");
+    },
+  });
+
   return (
     <>
       <Head>
@@ -39,8 +53,8 @@ export default function Home() {
       </Head>
 
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
-          <App />
+        <RainbowKitProvider chains={chains} theme={darkTheme({ overlayBlur: "small" })}>
+          <ThirdwebProvider>{address ? <App /> : <Landing />}</ThirdwebProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </>
