@@ -8,16 +8,18 @@ export default function Header() {
   return (
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <p
-          className={inter.className}
-          style={{
-            fontWeight: 700,
-            fontSize: "1.5rem",
-            userSelect: "none",
-          }}
-        >
-          deMark
-        </p>
+        <a href="/">
+          <p
+            className={inter.className}
+            style={{
+              fontWeight: 700,
+              fontSize: "1.5rem",
+              userSelect: "none",
+            }}
+          >
+            deMark
+          </p>
+        </a>
       </div>
       <div className={styles.headerRight}>
         <ConnectButton showBalance={false} />
