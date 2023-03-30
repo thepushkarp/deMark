@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import Header from "@/components/Header/Header";
 import Image from "next/image";
 import { Inter } from "next/font/google";
+import { PuffLoader } from "react-spinners";
+
+const Hash = require("ipfs-only-hash");
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +17,9 @@ export default function App() {
   const uploadToIpfs = async () => {
     if (file) {
       showLoader();
+      const fileData = new Uint8Array(await file.arrayBuffer());
+      const cidBeforeUpload = await Hash.of(fileData);
+      console.log("CID before upload:", cidBeforeUpload);
       const uploadUrl = await upload({
         data: [file],
         options: {
@@ -50,7 +56,7 @@ export default function App() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (isFileTooLarge(file)) {
-        alert("File size is too large");
+        alert("File size is too large. Please upload a file with size less than 15MB.");
         return;
       }
       setFile(file);
@@ -101,7 +107,7 @@ export default function App() {
               width: "100%",
             }}
           >
-            <Image src="/loader.gif" alt="loader" width={100} height={100} />
+            <PuffLoader color="#0071ff" speedMultiplier={2} size={100} />
           </div>
           <div id="upload">
             <div
