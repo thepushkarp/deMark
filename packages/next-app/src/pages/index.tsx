@@ -1,7 +1,7 @@
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig, useAccount } from "wagmi";
+import { configureChains, createClient, useAccount } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, goerli, localhost } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -9,6 +9,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import App from "./App/app";
 import Landing from "./Landing/Landing";
+import dynamic from "next/dynamic";
 
 const { chains, provider } = configureChains(
   [mainnet, polygon, optimism, arbitrum, goerli, localhost],
@@ -31,6 +32,8 @@ const wagmiClient = createClient({
 });
 
 export default function Home() {
+  const WagmiConfig = dynamic(() => import("wagmi").then(mod => mod.WagmiConfig), { ssr: false });
+
   const { address, isConnecting, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {
       console.log("Connected", { address, connector, isReconnected });

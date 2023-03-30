@@ -5,8 +5,11 @@ import styles from "./Components.module.scss";
 import Loader from "./Loader";
 const Hash = require("ipfs-only-hash");
 
-// send ipfsLink and cidBeforeUpload to parent component
-export default function Uploader(props: { ipfsData: (data: { ipfsLink: string; cidBeforeUpload: string }) => void }) {
+interface UploaderProps {
+  setIpfsData: (data: { ipfsLink: string; cidBeforeUpload: string }) => void;
+}
+
+export default function Uploader(props: UploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [ipfsLink, setIpfsLink] = useState<string>("");
   const [cidBeforeUpload, setCidBeforeUpload] = useState<string>("");
@@ -15,10 +18,14 @@ export default function Uploader(props: { ipfsData: (data: { ipfsLink: string; c
   const { mutateAsync: upload } = useStorageUpload();
 
   useEffect(() => {
-    setFile(null);
-    setCidBeforeUpload("");
-    setIpfsLink("");
-  }, []);
+    if (ipfsLink && cidBeforeUpload) {
+      props.setIpfsData({
+        ipfsLink: ipfsLink,
+        cidBeforeUpload: cidBeforeUpload,
+      });
+      console.log("IPFS link:", ipfsLink);
+    }
+  }, [ipfsLink, cidBeforeUpload, props]);
 
   const isFileTooLarge = (file: File) => {
     // Can't upload a file with size > 15MB
@@ -48,19 +55,16 @@ export default function Uploader(props: { ipfsData: (data: { ipfsLink: string; c
     if (file) {
       setIsUploading(true);
       generateCidBeforeUpload(file);
-      const uploadUrl = await upload({
+      await upload({
         data: [file],
         options: {
           uploadWithGatewayUrl: false,
           uploadWithoutDirectory: true,
         },
-      });
-      setIpfsLink(uploadUrl[0]);
-      setFile(null);
-      setIsUploading(false);
-      props.ipfsData({
-        ipfsLink: ipfsLink,
-        cidBeforeUpload: cidBeforeUpload,
+      }).then((uploadUrl: string[]) => {
+        setIpfsLink(uploadUrl[0]);
+        setIsUploading(false);
+        setFile(null);
       });
     }
   };
@@ -73,7 +77,13 @@ export default function Uploader(props: { ipfsData: (data: { ipfsLink: string; c
         <div id="upload">
           {file ? (
             <div className={styles.uploadedFileContainer}>
-              <Image src={URL.createObjectURL(file)} alt="Uploaded image" width={250} height={250} />
+              <Image
+                src={URL.createObjectURL(file)}
+                alt="Uploaded image"
+                height="0"
+                width="0"
+                style={{ width: "auto", height: "250px" }}
+              />
               <div className={styles.uploadBtnContainer}>
                 <button onClick={uploadToIpfs} className={`${styles.btn} ${styles.uploadBtn}`}>
                   Upload to IPFS

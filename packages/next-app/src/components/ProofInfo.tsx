@@ -7,7 +7,7 @@ export default function ProofInfo(props: { ipfsLink: string }) {
   let ipfsLink: string = props.ipfsLink;
 
   return (
-    <div id="ipfsDetails" className={styles.ProofInfoContainer}>
+    <div id="ipfsDetails" className={styles.proofInfoContainer}>
       <h1 className={inter.className}>IPFS Link</h1>
       <a id="ipfsLinkAnchor" href={ipfsLink} target="_blank" rel="noreferrer noopener">
         <p className={`${inter.className} ${styles.whiteText}`} id="ipfsLinkText">

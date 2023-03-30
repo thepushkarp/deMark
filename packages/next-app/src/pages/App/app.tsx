@@ -1,6 +1,6 @@
 import styles from "./App.module.scss";
 import { useStorageUpload } from "@thirdweb-dev/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "@/components/Header";
 import ProofInfo from "@/components/ProofInfo";
 import Uploader from "@/components/Uploader";
@@ -8,14 +8,9 @@ import Uploader from "@/components/Uploader";
 export default function App() {
   const [cidBeforeUpload, setCidBeforeUpload] = useState<string>("");
   const [ipfsLink, setIpfsLink] = useState<string>("");
-  const { mutateAsync: upload } = useStorageUpload();
-
-  useEffect(() => {
-    setCidBeforeUpload("");
-    setIpfsLink("");
-  }, []);
 
   const setIpfsData = (data: { ipfsLink: string; cidBeforeUpload: string }) => {
+    console.log("Data:", data);
     setIpfsLink(data.ipfsLink);
     setCidBeforeUpload(data.cidBeforeUpload);
   };
@@ -25,7 +20,7 @@ export default function App() {
       <Header />
       <main className={styles.main}>
         <div className={styles.container}>
-          {ipfsLink ? <ProofInfo ipfsLink={ipfsLink} /> : <Uploader ipfsData={setIpfsData} />}
+          {ipfsLink && cidBeforeUpload ? <ProofInfo ipfsLink={ipfsLink} /> : <Uploader setIpfsData={setIpfsData} />}
         </div>
       </main>
     </>
