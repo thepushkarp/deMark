@@ -1,5 +1,4 @@
 import Head from "next/head";
-import App from "./App/App";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig, useAccount } from "wagmi";
@@ -8,6 +7,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
+import App from "./App/app";
 import Landing from "./Landing/Landing";
 
 const { chains, provider } = configureChains(
@@ -25,7 +25,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors,
   provider,
 });

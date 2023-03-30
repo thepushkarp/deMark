@@ -1,4 +1,4 @@
-import styles from "@/styles/Home.module.css";
+import styles from "./Landing.module.scss";
 import { Inter } from "next/font/google";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
@@ -9,26 +9,8 @@ export default function Landing() {
     <main className={styles.main}>
       <div className={styles.center}>
         <div className={styles.center}>
-          <h1
-            className={inter.className}
-            style={{
-              margin: "10px",
-              fontSize: "4rem",
-              userSelect: "none",
-            }}
-          >
-            deMark
-          </h1>
-          <p
-            className={inter.className}
-            style={{
-              marginTop: "10px",
-              fontSize: "1.25rem",
-              userSelect: "none",
-            }}
-          >
-            Proof of Source for your Images
-          </p>
+          <h1 className={`${inter.className} ${styles.title}`}>deMark</h1>
+          <p className={`${inter.className} ${styles.description}`}>Proof of Source for your Images</p>
         </div>
         <ConnectButton showBalance={false} />
       </div>
