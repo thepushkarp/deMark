@@ -12,7 +12,11 @@ import Landing from "./Landing/Landing";
 import dynamic from "next/dynamic";
 
 const { chains, provider } = configureChains(
-  [polygon, polygonMumbai, localhost],
+  [
+    polygon,
+    polygonMumbai,
+    // localhost
+  ],
   [
     infuraProvider({ apiKey: process.env.INFURA_ID }),
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
