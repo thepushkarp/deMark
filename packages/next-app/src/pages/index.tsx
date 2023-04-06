@@ -1,7 +1,7 @@
 import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, useAccount } from "wagmi";
+import { configureChains, createClient, useAccount, useProvider } from "wagmi";
 import { polygon, polygonMumbai, localhost } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -37,6 +37,7 @@ const wagmiClient = createClient({
 
 export default function Home() {
   const WagmiConfig = dynamic(() => import("wagmi").then(mod => mod.WagmiConfig), { ssr: false });
+  const provider = useProvider();
 
   const { address, isConnecting, isDisconnected } = useAccount({
     onConnect({ address, connector, isReconnected }) {
@@ -58,7 +59,7 @@ export default function Home() {
 
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains} theme={darkTheme({ overlayBlur: "small" })}>
-          <ThirdwebProvider>{address ? <App address={address} /> : <Landing />}</ThirdwebProvider>
+          <ThirdwebProvider>{address ? <App address={address} provider={provider} /> : <Landing />}</ThirdwebProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </>
