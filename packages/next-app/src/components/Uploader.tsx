@@ -4,12 +4,12 @@ import Image from "next/image";
 import styles from "./Components.module.scss";
 import Loader from "./Loader";
 const Hash = require("ipfs-only-hash");
+import { ethers } from "ethers";
 
-interface UploaderProps {
-  setIpfsData: (data: { ipfsLink: string; cidBeforeUpload: string }) => void;
-}
+import contract from "../contracts/contract-address.json";
+import artifacts from "../contracts/deMark.json";
 
-export default function Uploader(props: UploaderProps) {
+export default function Uploader(props: any) {
   const [file, setFile] = useState<File | null>(null);
   const [ipfsLink, setIpfsLink] = useState<string>("");
   const [cidBeforeUpload, setCidBeforeUpload] = useState<string>("");
@@ -26,6 +26,19 @@ export default function Uploader(props: UploaderProps) {
       console.log("IPFS link:", ipfsLink);
     }
   }, [ipfsLink, cidBeforeUpload, props]);
+
+  const callNFTContract = async (ipfsLink: string, signerAddress: string) => {
+    console.log("Contracts", contract);
+    console.log("Artifacts", artifacts);
+
+    const demarkSBT = new ethers.Contract(contract.deMark, artifacts.abi);
+    const tx = await demarkSBT.connect(signerAddress).mint(signerAddress, ipfsLink);
+    const receipt = await tx.wait();
+    if (!receipt.status) {
+      throw Error(`Transaction failed: ${tx.hash}`);
+    }
+    console.log(`Transaction successful: ${tx.hash}`);
+  };
 
   const isFileTooLarge = (file: File) => {
     // Can't upload a file with size > 15MB
@@ -63,6 +76,7 @@ export default function Uploader(props: UploaderProps) {
         },
       }).then((uploadUrl: string[]) => {
         setIpfsLink(uploadUrl[0]);
+        callNFTContract(uploadUrl[0], props.address);
         setIsUploading(false);
         setFile(null);
       });
@@ -82,7 +96,10 @@ export default function Uploader(props: UploaderProps) {
                 alt="Uploaded image"
                 height="0"
                 width="0"
-                style={{ width: "auto", height: "250px" }}
+                style={{
+                  width: "auto",
+                  height: "250px",
+                }}
               />
               <div className={styles.uploadBtnContainer}>
                 <button onClick={uploadToIpfs} className={`${styles.btn} ${styles.uploadBtn}`}>

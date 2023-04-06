@@ -2,7 +2,7 @@ import Head from "next/head";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, useAccount } from "wagmi";
-import { polygon, polygonMumbai } from "wagmi/chains";
+import { polygon, polygonMumbai, localhost } from "wagmi/chains";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
@@ -12,7 +12,7 @@ import Landing from "./Landing/Landing";
 import dynamic from "next/dynamic";
 
 const { chains, provider } = configureChains(
-  [polygon, polygonMumbai],
+  [polygon, polygonMumbai, localhost],
   [
     infuraProvider({ apiKey: process.env.INFURA_ID }),
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
@@ -54,7 +54,7 @@ export default function Home() {
 
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains} theme={darkTheme({ overlayBlur: "small" })}>
-          <ThirdwebProvider>{address ? <App /> : <Landing />}</ThirdwebProvider>
+          <ThirdwebProvider>{address ? <App address={address} /> : <Landing />}</ThirdwebProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </>
